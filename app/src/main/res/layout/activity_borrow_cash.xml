@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BorrowCashActivity">
+
+    <EditText
+        android:id="@+id/phone_number"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:textStyle="bold"
+        android:hint="Enter Phone Number"
+        android:inputType="number"/>
+    <EditText
+        android:id="@+id/amount"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="100dp"
+        android:ems="10"
+        android:textStyle="bold"
+        android:hint="Enter Amount"
+        android:inputType="number"/>
+    <TextView
+        android:id="@+id/repay"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="170dp"
+        android:text="How would you want to repay back:"
+        android:textStyle="bold"
+        android:textSize="15dp"/>
+
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="300dp"
+        android:layout_height="120dp"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="170dp">
+
+        <RadioButton
+            android:id="@+id/radio_button1"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:text="0% for 2days" />
+
+        <RadioButton
+            android:id="@+id/radio_button2"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:text="5% for 15days" />
+
+        <RadioButton
+            android:id="@+id/radio_button3"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:text="10% for 25days" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/submit_btn1"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="350dp"
+        android:background="@color/colorPrimary"
+        android:text="SUBMIT" />
+
+</RelativeLayout>

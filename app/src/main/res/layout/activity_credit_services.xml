@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".CreditServicesActivity">
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:text="You are currently qualified for upto a limit of Kshs 500:"
+                android:textSize="15dp" />
+
+            <Spinner
+                android:id="@+id/spinner2"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="70dp"
+                android:entries="@array/repayment_rate2" />
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="120dp"
+                android:text="Are you serving any loan with any lender?"
+                android:textSize="15dp" />
+
+            <Spinner
+                android:id="@+id/spinner3"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="160dp"
+                android:entries="@array/option" />
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="210dp"
+                android:text="Select what to pay for:"
+                android:textSize="15dp" />
+
+            <Spinner
+                android:id="@+id/spinner4"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="250dp"
+                android:entries="@array/select_bill" />
+
+            <EditText
+                android:id="@+id/phone_no"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="300dp"
+                android:inputType="number"
+                android:hint="Phone Number"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/meter_no"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="350dp"
+                android:inputType="number"
+                android:hint="Meter Number"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/amount"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="390dp"
+                android:inputType="number"
+                android:hint="Amount"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/till_no"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="470dp"
+                android:inputType="number"
+                android:hint="Till Number"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/acc_no"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="520dp"
+                android:layout_marginLeft="3dp"
+                android:inputType="number"
+                android:hint="Account Number"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/paybill_no"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="170dp"
+                android:layout_marginTop="470dp"
+                android:inputType="number"
+                android:hint="PayBill Number"
+                android:visibility="invisible" />
+
+            <Spinner
+                android:id="@+id/spinner6"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="440dp"
+                android:entries="@array/line_provider"
+                android:visibility="invisible" />
+            <Spinner
+                android:id="@+id/spinner5"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="440dp"
+                android:entries="@array/account_type"
+                android:visibility="invisible"/>
+
+            <Button
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="720dp"
+                android:background="@color/colorPrimary"
+                android:text="SUBMIT"
+                android:textSize="20dp" />
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "295360976837",
+    "firebase_url": "https://utility-manager.firebaseio.com",
+    "project_id": "utility-manager",
+    "storage_bucket": "utility-manager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:295360976837:android:30a960c0dc3b5f1b",
+        "android_client_info": {
+          "package_name": "com.todaytech2.utilitymanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "295360976837-98udbmc96rqmea2l8l590d0liq2m3njv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCJvaq5boSumZZCP2vWykDj-YQ9gb0BvE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "295360976837-98udbmc96rqmea2l8l590d0liq2m3njv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

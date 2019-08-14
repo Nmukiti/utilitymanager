@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">Utility Manager</string>
+    <string name="repayment_prompt">Choose a country</string>
+    <string name="repayment_prompt2">Choose a country</string>
+    <string-array name="services">
+        <item>Credit Services</item>
+        <item>Borrow Cash</item>
+        <item>Cash Purchase</item>
+    </string-array>
+
+    <string-array name="repayment_rate">
+        <item>0% for 2days</item>
+        <item>5% for 15days</item>
+        <item>10% for 25days</item>
+    </string-array>
+    <string-array name="repayment_rate2">
+        <item>Repayment rate</item>
+        <item>0% for 4days</item>
+        <item>3% for 15days</item>
+        <item>7% for 25days</item>
+    </string-array>
+
+    <string-array name="select_bill">
+        <item>Select a bill</item>
+        <item value="KPLC Tokens">KPLC Tokens</item>
+        <item value="KPLC Bill">KPLC Bill</item>
+        <item value="Airtime">Airtime</item>
+        <item value="Supermarket Purchase">Supermarket Purchase</item>
+    </string-array>
+    <string-array name="select_bill2">
+        <item>Select a bill</item>
+        <item value="KPLC Tokens">KPLC Tokens</item>
+        <item value="KPLC Bill">KPLC Bill</item>
+    </string-array>
+
+    <string-array name="line_provider">
+        <item> Choose Service</item>
+        <item>Safaricom</item>
+        <item>Airtel</item>
+        <item>Telkom</item>
+        <item>Equitel</item>
+    </string-array>
+
+    <string-array name="account_type">
+        <item>Account Type</item>
+        <item>PayBill</item>
+        <item>Till Number</item>
+    </string-array>
+    <string-array name="option">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+</resources>

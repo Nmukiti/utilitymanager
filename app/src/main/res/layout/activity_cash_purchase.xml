@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CashPurchaseActivity">
+    <Spinner
+        android:id="@+id/spinner7"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        android:entries="@array/select_bill2" />
+    <EditText
+        android:id="@+id/phone_no2"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="90dp"
+        android:hint="Phone Number"
+        android:visibility="invisible" />
+
+    <EditText
+        android:id="@+id/meter_no2"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="140dp"
+        android:hint="Meter Number"
+        android:visibility="invisible" />
+
+    <EditText
+        android:id="@+id/amount2"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="200dp"
+        android:hint="Amount"
+        android:visibility="invisible" />
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="270dp"
+        android:background="@color/colorPrimary"
+        android:text="SUBMIT"
+        android:textSize="20dp" />
+
+</RelativeLayout>
