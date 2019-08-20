@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.nfc.Tag;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,13 +23,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.collect.Range;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -45,6 +52,8 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity{
+    String apiUrl= "http://lend.mobile-transact.com:8090/jsortcash/v1/register";
+    String name,email,kra,dob,nssf,nhif,phonenumber;
 
     private static final String TAG = "RegisterActivity";
 
@@ -52,74 +61,39 @@ public class RegisterActivity extends AppCompatActivity{
     private EditText InputName, InputPhoneNumber, InputPassword,InputConfirmPassword,Inputkra,Inputnhif,Inputnssf,Inputidno,Inputemail;
     private TextView Inputdob;
     private ProgressDialog loadingBar;
+    ProgressDialog progressDialog;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
-    private static final Pattern PASSWORD_PATTERN =
-            Pattern.compile("^" +
-                    //"(?=.*[0-9])" +         //at least 1 digit
-                    //"(?=.*[a-z])" +         //at least 1 lower case letter
-                    //"(?=.*[A-Z])" +         //at least 1 upper case letter
-                    "(?=.*[a-zA-Z])" +      //any letter
-                    "(?=.*[@#$%^&+=])" +    //at least 1 special character
-                    "(?=\\S+$)" +           //no white spaces
-                    ".{4,}" +               //at least 4 characters
-                    "$");
-    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-
+    AwesomeValidation awesomeValidation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
+
 
         loadingBar = new ProgressDialog(this);
+        CreateAccountButton = (Button) findViewById(R.id.register_btn);
+        InputName = (EditText) findViewById(R.id.register_username_input);
+        InputPassword = (EditText) findViewById(R.id.register_password_input);
+        InputConfirmPassword = (EditText) findViewById(R.id.register_password_input2);
+        Inputemail = (EditText)findViewById(R.id.email_input);
+        Inputkra = (EditText)findViewById(R.id.kra_input);
+        Inputidno = (EditText)findViewById(R.id.idno_input);
+        Inputdob=(TextView) findViewById(R.id.dob_input);
+        InputPhoneNumber = (EditText) findViewById(R.id.register_phone_number_input);
 
-        try{
-            CreateAccountButton = (Button) findViewById(R.id.register_btn);
-            InputName = (EditText) findViewById(R.id.register_username_input);
-            InputPassword = (EditText) findViewById(R.id.register_password_input);
-            InputConfirmPassword = (EditText) findViewById(R.id.register_password_input2);
-            Inputemail = (EditText)findViewById(R.id.email_input);
-            Inputkra = (EditText)findViewById(R.id.kra_input);
-            Inputidno = (EditText)findViewById(R.id.idno_input);
-            Inputdob=(TextView) findViewById(R.id.dob_input);
-            InputPhoneNumber = (EditText) findViewById(R.id.register_phone_number_input);
-
-
-           /* URL url= new URL("http://delivery.mobile-transact.com:8090/jsortcash/v1/register");
-            HttpURLConnection connection=(HttpURLConnection)url.openConnection();
-
-            String urlParameters="sn=CO2G8416DRJM&cn=&locale=&caller=&num=12345";
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Key","Value");
-            connection.setDoOutput(true);
-            DataOutputStream dStream=new DataOutputStream(connection.getOutputStream());
-            dStream.writeBytes(urlParameters);
-            dStream.flush();
-            dStream.close();
-
-            int responseCode=connection.getResponseCode();
-            String output="Request URL"+ url;
-            output += System.getProperty("line.separator")+"Request Parameters " +urlParameters;
-            output += System.getProperty("line.separator")+"Request Code " +responseCode;
-
-            BufferedReader br=new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String line="";
-            StringBuilder responseOutput=new StringBuilder();
-
-            while ((line=br.readLine())!=null){
-                responseOutput.append(line);
-            }
-            br.close();
-            output +=System.getProperty("line.separator")+responseOutput.toString();
-            CreateAccountButton.setText(output);
+        String regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{8,}";
+        awesomeValidation.addValidation(RegisterActivity.this, R.id.register_username_input, "[a-zA-Z\\s]+", R.string.fullname);
+        awesomeValidation.addValidation(RegisterActivity.this, R.id.email_input, android.util.Patterns.EMAIL_ADDRESS, R.string.email);
+        awesomeValidation.addValidation(RegisterActivity.this,R.id.register_phone_number_input, "[0-9\\s]+", R.string.phoneno);
+        awesomeValidation.addValidation(RegisterActivity.this,R.id.idno_input, "[0-9\\s]+", R.string.idno);
+        awesomeValidation.addValidation(RegisterActivity.this, R.id.dob_input, Range.closed(1900, Calendar.getInstance().get(Calendar.YEAR)), R.string.dob);
+        awesomeValidation.addValidation(RegisterActivity.this,R.id.register_password_input, regexPassword, R.string.pass1);
+        awesomeValidation.addValidation(RegisterActivity.this,R.id.register_password_input2,R.id.register_password_input,R.string.pass2);
 
 
-        }catch (MalformedURLException e){
-            e.printStackTrace();*/
-        }catch (Exception e){
-            e.printStackTrace();
-        }
 
         Inputdob.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,137 +127,111 @@ public class RegisterActivity extends AppCompatActivity{
             @Override
             public void onClick(View view)
             {
-                CreateAccount();
+                // create object of HTTPAsyncTask class and execute it
+                HTTPAsyncTask myAsyncTasks = new HTTPAsyncTask();
+                myAsyncTasks.execute();
             }
         });
     }
-    private void CreateAccount() {
-        String name = InputName.getText().toString();
-        String phone = InputPhoneNumber.getText().toString();
-        String email = Inputemail.getText().toString();
-        String password = InputPassword.getText().toString();
-        String password2 = InputConfirmPassword.getText().toString();
-
-        if (TextUtils.isEmpty(name))
-        {
-            Toast.makeText(this, "Please write your name...", Toast.LENGTH_SHORT).show();
-        }
-        else if (TextUtils.isEmpty(phone))
-        {
-            Toast.makeText(this, "Please write your phone number...", Toast.LENGTH_SHORT).show();
-        }
-        else if (TextUtils.isEmpty(email))
-        {
-            Toast.makeText(this, "Email address required...", Toast.LENGTH_SHORT).show();
-        }
-        else if (TextUtils.isEmpty(password))
-        {
-                Toast.makeText(this, "Enter Password ...", Toast.LENGTH_SHORT).show();
-        }
-        else if (TextUtils.isEmpty(password2))
-        {
-            Toast.makeText(this, "Confirm Password cannot be empty ...", Toast.LENGTH_SHORT).show();
+    private class HTTPAsyncTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // display a progress dialog for good user experiance
+            progressDialog = new ProgressDialog(RegisterActivity.this);
+            progressDialog.setMessage("Please Wait");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
         }
 
-        else
-        {
-            loadingBar.setTitle("Create Account");
-            loadingBar.setMessage("Please wait, while we are checking the credentials.");
-            loadingBar.setCanceledOnTouchOutside(false);
-            loadingBar.show();
+        @Override
+        protected String doInBackground(String... params ) {
+            // implement API in background and store the response in current variable
+            String current = "";
+            try {
+                URL url;
+                HttpURLConnection urlConnection = null;
+                try {
 
-           // ValidatephoneNumber(name, phone, password,email);
-           /* try{
-            URL url= new URL("http://delivery.mobile-transact.com:8090/jsortcash/v1/register");
-            HttpURLConnection connection=(HttpURLConnection)url.openConnection();
+                    JSONObject jsRegister  = new JSONObject();
+                    jsRegister.put("customername", ((EditText)findViewById(R.id.register_username_input)).getText().toString());
+                    jsRegister.put("phonenumber",((EditText)findViewById(R.id.register_phone_number_input)).getText().toString());
+                    jsRegister.put("idnumber",((EditText)findViewById(R.id.idno_input)).getText().toString());
+                    jsRegister.put("emailaddress",((EditText)findViewById(R.id.email_input)).getText().toString());
+                    jsRegister.put("krapin",((EditText)findViewById(R.id.kra_input)).getText().toString());
+                    jsRegister.put("nssfnumber",((EditText)findViewById(R.id.nssf_input)).getText().toString());
+                    jsRegister.put("nhifnumber",((EditText)findViewById(R.id.nhif_input)).getText().toString());
+                    jsRegister.put("password",((EditText)findViewById(R.id.register_password_input)).getText().toString());
+                    jsRegister.put("userdateofbirth",((TextView)findViewById(R.id.dob_input)).getText().toString());
 
-            String urlParameters="sn=CO2G8416DRJM&cn=&locale=&caller=&num=12345";
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Key","Value");
-            connection.setDoOutput(true);
-            DataOutputStream dStream=new DataOutputStream(connection.getOutputStream());
-            dStream.writeBytes(urlParameters);
-            dStream.flush();
-            dStream.close();
+                    url = new URL(apiUrl);
 
-            int responseCode=connection.getResponseCode();
-            String output="Request URL"+ url;
-            output += System.getProperty("line.separator")+"Request Parameters " +urlParameters;
-            output += System.getProperty("line.separator")+"Request Code " +responseCode;
+                    urlConnection = (HttpURLConnection) url
+                            .openConnection();
 
-            BufferedReader br=new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String line="";
-            StringBuilder responseOutput=new StringBuilder();
+                  /*  InputStream in = urlConnection.getInputStream();
 
-            while ((line=br.readLine())!=null){
-                responseOutput.append(line);
+                    InputStreamReader isw = new InputStreamReader(in);
+
+                    int data = isw.read();
+                    while (data != -1) {
+                        current += (char) data;
+                        data = isw.read();
+                        System.out.print(current);
+
+                    } */
+                    int responseCode=0;
+
+                    urlConnection.setRequestMethod("POST");
+                    urlConnection.setConnectTimeout(16000);
+                    urlConnection.setReadTimeout(16000);
+                    urlConnection.setDoOutput(true);
+                    urlConnection.setDoInput(true);
+                    urlConnection.setUseCaches(false);
+                    urlConnection.setRequestProperty("Content-Type", "application/json");
+                    urlConnection.connect();
+                    OutputStream dStream = new BufferedOutputStream(urlConnection.getOutputStream());
+                    dStream.write(jsRegister.toString().getBytes());
+                    dStream.flush();
+                    dStream.close();
+                    responseCode = urlConnection.getResponseCode();
+                    // return the data to onPostExecute method
+                    return current;
+
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (urlConnection != null) {
+                        urlConnection.disconnect();
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "Exception: " + e.getMessage();
             }
-            br.close();
-            output +=System.getProperty("line.separator")+responseOutput.toString();
-            CreateAccountButton.setText(output);
+            return current;
+        }
 
+        @Override
+        protected void onPostExecute(String s) {
 
-           }catch (MalformedURLException e){
-            e.printStackTrace();
-            }catch (Exception e){
-                e.printStackTrace();  */
+            Log.d("data", s.toString());
+            // dismiss the progress dialog after receiving data from API
+            progressDialog.dismiss();
+
+            if (awesomeValidation.validate()){
+                Toast.makeText(RegisterActivity.this,"Registration successfull",Toast.LENGTH_SHORT);
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }else
+            {
+                Toast.makeText(RegisterActivity.this,"Error",Toast.LENGTH_SHORT);
             }
-
+        }
     }
 
 }
-
-   /* private void ValidatephoneNumber(final String name, final String phone,final String password, final String email) {
-        final DatabaseReference RootRef;
-        RootRef = FirebaseDatabase.getInstance().getReference();
-
-        RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-            {
-                if (!(dataSnapshot.child("Users").child(phone).exists()))
-                {
-                    HashMap<String, Object> userdataMap = new HashMap<>();
-                    userdataMap.put("phone", phone);
-                    userdataMap.put("password", password);
-                    userdataMap.put("name", name);
-                    userdataMap.put("email", email);
-
-                    RootRef.child("Users").child(phone).updateChildren(userdataMap)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task)
-                                {
-                                    if (task.isSuccessful())
-                                    {
-                                        Toast.makeText(RegisterActivity.this, "Congratulations, your account has been created.", Toast.LENGTH_SHORT).show();
-                                        loadingBar.dismiss();
-
-                                        Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
-                                        startActivity(intent);
-                                    }
-                                    else
-                                    {
-                                        loadingBar.dismiss();
-                                        Toast.makeText(RegisterActivity.this, "Network Error: Please try again after some time...", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                }
-                else
-                {
-                    Toast.makeText(RegisterActivity.this, "This " + phone + " already exists.", Toast.LENGTH_SHORT).show();
-                    loadingBar.dismiss();
-                    Toast.makeText(RegisterActivity.this, "Please try again using another phone number.", Toast.LENGTH_SHORT).show();
-
-                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                    startActivity(intent);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });  */
-
