@@ -1,8 +1,12 @@
 package com.todaytech2.utilitymanager;
 
 import android.app.MediaRouteButton;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -15,10 +19,30 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedOutputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+
 public class CreditServicesActivity extends AppCompatActivity implements OnItemSelectedListener {
+    String apiUrl= "http://mtrans.mobile-transact.com:8090/jsortcash/v1/creditpurchase";
+    ArrayList<String> selectbill;
+    ArrayList<String> repaymentrate;
+    ArrayList<String> yesno;
+    ArrayList<String> lineprovider;
+
+    Spinner spinnera,spinnerb,spinnerc,spinnerd,spinnere,spinnerf;
+
+
     private Spinner spinner2, spinner3, spinner4, spinner5, spinner6;
     private EditText meterno, amount, paybillno, accountno, tillno, phoneno, option;
     private MediaRouteButton editTextObject;
+    ProgressDialog progressDialog;
 
     private RadioGroup rg1;
 
@@ -38,6 +62,7 @@ public class CreditServicesActivity extends AppCompatActivity implements OnItemS
 
 
         spinner4.setOnItemSelectedListener(this);
+        spinner5.setOnItemSelectedListener(this);
 
     }
 
@@ -73,19 +98,160 @@ public class CreditServicesActivity extends AppCompatActivity implements OnItemS
         }
         if (spinner4.getItemAtPosition(position).toString().equalsIgnoreCase("Others")) {
             phoneno.setVisibility(View.INVISIBLE);
-            amount.setVisibility(View.VISIBLE);
+            amount.setVisibility(View.INVISIBLE);
             meterno.setVisibility(View.INVISIBLE);
             spinner6.setVisibility(View.INVISIBLE);
-            //spinner5.setVisibility(View.VISIBLE);
-            //paybillno.setVisibility(View.VISIBLE);
-            //accountno.setVisibility(View.VISIBLE);
-            tillno.setVisibility(View.VISIBLE);
+            spinner5.setVisibility(View.VISIBLE);
+            paybillno.setVisibility(View.INVISIBLE);
+            accountno.setVisibility(View.INVISIBLE);
+            tillno.setVisibility(View.INVISIBLE);
         }
+
+       /* if(spinner5.getItemAtPosition(position).toString().equalsIgnoreCase("PayBill")){
+                paybillno.setVisibility(View.VISIBLE);
+                amount.setVisibility(View.VISIBLE);
+                phoneno.setVisibility(View.INVISIBLE);
+                amount.setVisibility(View.INVISIBLE);
+                meterno.setVisibility(View.INVISIBLE);
+                spinner6.setVisibility(View.INVISIBLE);
+                spinner4.setVisibility(View.INVISIBLE);
+            }
+        if(spinner5.getItemAtPosition(position).toString().equalsIgnoreCase("Till Number")){
+                tillno.setVisibility(View.VISIBLE);
+                accountno.setVisibility(View.VISIBLE);
+                amount.setVisibility(View.VISIBLE);
+                phoneno.setVisibility(View.INVISIBLE);
+                amount.setVisibility(View.INVISIBLE);
+                meterno.setVisibility(View.INVISIBLE);
+                spinner6.setVisibility(View.INVISIBLE);
+                spinner4.setVisibility(View.INVISIBLE);
+            }  */
 
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    private class HTTPAsyncTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // display a progress dialog for good user experiance
+            progressDialog = new ProgressDialog(CreditServicesActivity.this);
+            progressDialog.setMessage("Please Wait");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params ) {
+            // implement API in background and store the response in current variable
+            String current = "";
+            try {
+                URL url;
+                HttpURLConnection urlConnection = null;
+                try {
+
+                    JSONObject jsRegister  = new JSONObject();
+                    jsRegister.put("phonenumber",((EditText)findViewById(R.id.phone_no)).getText().toString());
+                    jsRegister.put("amount",((EditText)findViewById(R.id.amount)).getText().toString());
+                    jsRegister.put("meterno",((EditText)findViewById(R.id.meter_no)).getText().toString());
+                    jsRegister.put("tillno",((EditText)findViewById(R.id.till_no)).getText().toString());
+                    if (jsRegister.getInt("success")==1){
+                        JSONArray jsonArray=jsRegister.getJSONArray("bill");
+                        for (int i=0;i<jsonArray.length();i++){
+                            JSONObject jsRegister1=jsonArray.getJSONObject(i);
+                            String bill=jsRegister1.getString("id");
+                            selectbill.add("name");
+                        }
+                    }
+                    if (jsRegister.getInt("success")==1){
+                        JSONArray jsonArray=jsRegister.getJSONArray("interest");
+                        for (int i=0;i<jsonArray.length();i++){
+                            JSONObject jsRegister1=jsonArray.getJSONObject(i);
+                            String bill=jsRegister1.getString("id");
+                            repaymentrate.add("name");
+                        }
+                    }
+                    if (jsRegister.getInt("success")==1){
+                        JSONArray jsonArray=jsRegister.getJSONArray("serviceprovider");
+                        for (int i=0;i<jsonArray.length();i++){
+                            JSONObject jsRegister1=jsonArray.getJSONObject(i);
+                            String bill=jsRegister1.getString("id");
+                            lineprovider.add("name");
+                        }
+                    }
+                    if (jsRegister.getInt("success")==1){
+                        JSONArray jsonArray=jsRegister.getJSONArray("option");
+                        for (int i=0;i<jsonArray.length();i++){
+                            JSONObject jsRegister1=jsonArray.getJSONObject(i);
+                            String bill=jsRegister1.getString("id");
+                            yesno.add("name");
+                        }
+                    }
+                    spinner2.setAdapter(new ArrayAdapter<String>(CreditServicesActivity.this,android.R.layout.simple_spinner_dropdown_item,repaymentrate));
+                    spinner3.setAdapter(new ArrayAdapter<String>(CreditServicesActivity.this,android.R.layout.simple_spinner_dropdown_item,yesno));
+                    spinner4.setAdapter(new ArrayAdapter<String>(CreditServicesActivity.this,android.R.layout.simple_spinner_dropdown_item,selectbill));
+                    spinner6.setAdapter(new ArrayAdapter<String>(CreditServicesActivity.this,android.R.layout.simple_spinner_dropdown_item,lineprovider));
+
+                    url = new URL(apiUrl);
+
+                    urlConnection = (HttpURLConnection) url
+                            .openConnection();
+
+                  /*  InputStream in = urlConnection.getInputStream();
+
+                    InputStreamReader isw = new InputStreamReader(in);
+
+                    int data = isw.read();
+                    while (data != -1) {
+                        current += (char) data;
+                        data = isw.read();
+                        System.out.print(current);
+
+                    } */
+                    int responseCode=0;
+
+                    urlConnection.setRequestMethod("POST");
+                    urlConnection.setConnectTimeout(16000);
+                    urlConnection.setReadTimeout(16000);
+                    urlConnection.setDoOutput(true);
+                    urlConnection.setDoInput(true);
+                    urlConnection.setUseCaches(false);
+                    urlConnection.setRequestProperty("Content-Type", "application/json");
+                    urlConnection.connect();
+                    OutputStream dStream = new BufferedOutputStream(urlConnection.getOutputStream());
+                    dStream.write(jsRegister.toString().getBytes());
+                    dStream.flush();
+                    dStream.close();
+                    responseCode = urlConnection.getResponseCode();
+                    // return the data to onPostExecute method
+                    return current;
+
+                }catch (JSONException e) { e.printStackTrace();
+                }
+                catch (Exception e) { e.printStackTrace();
+                } finally {
+                    if (urlConnection != null) {
+                        urlConnection.disconnect();
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "Exception: " + e.getMessage();
+            }
+            return current;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            Log.d("data", s.toString());
+            // dismiss the progress dialog after receiving data from API
+            progressDialog.dismiss();
+        }
     }
 }
