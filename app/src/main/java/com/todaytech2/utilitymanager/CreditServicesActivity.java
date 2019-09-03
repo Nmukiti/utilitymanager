@@ -71,7 +71,7 @@ public class CreditServicesActivity extends AppCompatActivity implements OnItemS
             accountno.setVisibility(View.INVISIBLE);
             tillno.setVisibility(View.INVISIBLE);
         }
-        if (spinner4.getItemAtPosition(position).toString().equalsIgnoreCase("Supermarket Purchase")) {
+        if (spinner4.getItemAtPosition(position).toString().equalsIgnoreCase("Others")) {
             phoneno.setVisibility(View.INVISIBLE);
             amount.setVisibility(View.VISIBLE);
             meterno.setVisibility(View.INVISIBLE);
