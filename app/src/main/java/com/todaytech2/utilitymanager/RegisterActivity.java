@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -52,7 +53,7 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity{
-    String apiUrl= "http://lend.mobile-transact.com:8090/jsortcash/v1/register";
+    String apiUrl= "http://mtrans.mobile-transact.com:8090/jsortcash/v1/register";
     String name,email,kra,dob,nssf,nhif,phonenumber;
 
     private static final String TAG = "RegisterActivity";
@@ -65,13 +66,13 @@ public class RegisterActivity extends AppCompatActivity{
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     AwesomeValidation awesomeValidation;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
-
 
         loadingBar = new ProgressDialog(this);
         CreateAccountButton = (Button) findViewById(R.id.register_btn);
