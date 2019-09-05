@@ -41,7 +41,7 @@ public class CreditServicesActivity extends AppCompatActivity{
 
 
     private Spinner spinner2, spinner3, spinner4, spinner5, spinner6;
-    private EditText meterno, amount, paybillno, accountno, tillno, phoneno, option,amount2;
+    private EditText meterno,meterno2, amount,amount2,amount3, paybillno, accountno, tillno, phoneno,phoneno2,phoneno3, option,amount4,amount5;
     private MediaRouteButton editTextObject;
     ProgressDialog progressDialog;
 
@@ -55,9 +55,15 @@ public class CreditServicesActivity extends AppCompatActivity{
         spinner6 = (Spinner) findViewById(R.id.spinner6);
         spinner5 = (Spinner) findViewById(R.id.spinner5);
         meterno = (EditText) findViewById(R.id.meter_no);
+        meterno2 = (EditText) findViewById(R.id.meter_no2);
         phoneno = (EditText) findViewById(R.id.phone_no);
+        phoneno2 = (EditText) findViewById(R.id.phone_no2);
+        phoneno3 = (EditText) findViewById(R.id.phone_no3);
         amount = (EditText) findViewById(R.id.amount);
         amount2 = (EditText) findViewById(R.id.amount2);
+        amount3 = (EditText) findViewById(R.id.amount3);
+        amount4 = (EditText) findViewById(R.id.amount4);
+        amount5 = (EditText) findViewById(R.id.amount5);
         paybillno = (EditText) findViewById(R.id.paybill_no);
         accountno = (EditText) findViewById(R.id.acc_no);
         tillno = (EditText) findViewById(R.id.till_no);
@@ -71,27 +77,47 @@ public class CreditServicesActivity extends AppCompatActivity{
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (spinner4.getItemAtPosition(position).toString().equalsIgnoreCase("KPLC Tokens")) {
                     phoneno.setVisibility(View.VISIBLE);
+                    phoneno2.setVisibility(View.INVISIBLE);
                     amount.setVisibility(View.VISIBLE);
                     meterno.setVisibility(View.VISIBLE);
+                    meterno2.setVisibility(View.INVISIBLE);
+                    amount2.setVisibility(View.INVISIBLE);
+                    amount3.setVisibility(View.INVISIBLE);
+                    amount4.setVisibility(View.INVISIBLE);
+                    amount5.setVisibility(View.INVISIBLE);
                     paybillno.setVisibility(View.INVISIBLE);
                     accountno.setVisibility(View.INVISIBLE);
                     tillno.setVisibility(View.INVISIBLE);
                     spinner5.setVisibility(View.INVISIBLE);
+                    spinner6.setVisibility(View.INVISIBLE);
                 }
                 if (spinner4.getItemAtPosition(position).toString().equalsIgnoreCase("KPLC Bill")) {
                     phoneno.setVisibility(View.INVISIBLE);
-                    amount.setVisibility(View.VISIBLE);
-                    meterno.setVisibility(View.VISIBLE);
+                    phoneno2.setVisibility(View.INVISIBLE);
+                    amount.setVisibility(View.INVISIBLE);
+                    meterno2.setVisibility(View.VISIBLE);
+                    meterno.setVisibility(View.INVISIBLE);
+                    amount2.setVisibility(View.VISIBLE);
+                    amount3.setVisibility(View.INVISIBLE);
+                    amount4.setVisibility(View.INVISIBLE);
+                    amount5.setVisibility(View.INVISIBLE);
                     paybillno.setVisibility(View.INVISIBLE);
                     accountno.setVisibility(View.INVISIBLE);
                     tillno.setVisibility(View.INVISIBLE);
                     spinner5.setVisibility(View.INVISIBLE);
+                    spinner6.setVisibility(View.INVISIBLE);
                 }
                 if (spinner4.getItemAtPosition(position).toString().equalsIgnoreCase("Airtime")) {
-                    phoneno.setVisibility(View.VISIBLE);
-                    amount.setVisibility(View.VISIBLE);
+                    phoneno.setVisibility(View.INVISIBLE);
+                    phoneno2.setVisibility(View.VISIBLE);
+                    amount3.setVisibility(View.VISIBLE);
                     meterno.setVisibility(View.INVISIBLE);
+                    meterno2.setVisibility(View.INVISIBLE);
                     spinner6.setVisibility(View.VISIBLE);
+                    amount.setVisibility(View.INVISIBLE);
+                    amount2.setVisibility(View.INVISIBLE);
+                    amount4.setVisibility(View.INVISIBLE);
+                    amount5.setVisibility(View.INVISIBLE);
                     spinner5.setVisibility(View.INVISIBLE);
                     paybillno.setVisibility(View.INVISIBLE);
                     accountno.setVisibility(View.INVISIBLE);
@@ -99,8 +125,14 @@ public class CreditServicesActivity extends AppCompatActivity{
                 }
                 if (spinner4.getItemAtPosition(position).toString().equalsIgnoreCase("Others")) {
                     phoneno.setVisibility(View.INVISIBLE);
+                    phoneno2.setVisibility(View.INVISIBLE);
+                    amount4.setVisibility(View.INVISIBLE);
+                    amount2.setVisibility(View.INVISIBLE);
                     amount.setVisibility(View.INVISIBLE);
+                    amount3.setVisibility(View.INVISIBLE);
+                    amount5.setVisibility(View.INVISIBLE);
                     meterno.setVisibility(View.INVISIBLE);
+                    meterno2.setVisibility(View.INVISIBLE);
                     spinner6.setVisibility(View.INVISIBLE);
                     spinner5.setVisibility(View.VISIBLE);
                     paybillno.setVisibility(View.INVISIBLE);
@@ -120,23 +152,33 @@ public class CreditServicesActivity extends AppCompatActivity{
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (spinner5.getItemAtPosition(position).toString().equalsIgnoreCase("PayBill")) {
                     paybillno.setVisibility(View.VISIBLE);
-                    amount2.setVisibility(View.VISIBLE);
+                    amount4.setVisibility(View.VISIBLE);
+                    amount2.setVisibility(View.INVISIBLE);
+                    amount.setVisibility(View.INVISIBLE);
+                    amount3.setVisibility(View.INVISIBLE);
+                    amount5.setVisibility(View.INVISIBLE);
                     accountno.setVisibility(View.VISIBLE);
                     tillno.setVisibility(View.INVISIBLE);
                     phoneno.setVisibility(View.INVISIBLE);
                     meterno.setVisibility(View.INVISIBLE);
+                    meterno2.setVisibility(View.INVISIBLE);
                     spinner6.setVisibility(View.INVISIBLE);
-                    spinner4.setVisibility(View.INVISIBLE);
+                    spinner4.setVisibility(View.VISIBLE);
                 }
                 if (spinner5.getItemAtPosition(position).toString().equalsIgnoreCase("Till Number")) {
                     tillno.setVisibility(View.VISIBLE);
-                    amount2.setVisibility(View.VISIBLE);
+                    amount5.setVisibility(View.VISIBLE);
+                    amount2.setVisibility(View.INVISIBLE);
+                    amount.setVisibility(View.INVISIBLE);
+                    amount3.setVisibility(View.INVISIBLE);
+                    amount4.setVisibility(View.INVISIBLE);
                     accountno.setVisibility(View.INVISIBLE);
                     phoneno.setVisibility(View.INVISIBLE);
                     paybillno.setVisibility(View.INVISIBLE);
                     meterno.setVisibility(View.INVISIBLE);
+                    meterno2.setVisibility(View.INVISIBLE);
                     spinner6.setVisibility(View.INVISIBLE);
-                    spinner4.setVisibility(View.INVISIBLE);
+                    spinner4.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -281,4 +323,3 @@ public class CreditServicesActivity extends AppCompatActivity{
             }
         }
     }
-
